@@ -20,10 +20,10 @@ namespace Nonocast.Connect {
 
 			var stream = req.Stream;
 
-			Console.WriteLine(req.Header.StartLine);
-			foreach (var each in req.Header.Properties) {
-				Console.WriteLine("{0}: {1}", each.Key, each.Value);
-			}
+			//Console.WriteLine(req.Header.StartLine);
+			//foreach (var each in req.Header.Properties) {
+			//	Console.WriteLine("{0}: {1}", each.Key, each.Value);
+			//}
 
 			var handshake = ComputeHandshake(req.Header.Properties["Sec-WebSocket-Key"]);
 			WriteStartLine(stream, "HTTP/1.1 101 Switching Protocols");
