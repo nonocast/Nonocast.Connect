@@ -19,6 +19,12 @@ namespace Nonocast.Connect {
 			if (!IsMatch(req)) return;
 
 			var stream = req.Stream;
+
+			Console.WriteLine(req.Header.StartLine);
+			foreach (var each in req.Header.Properties) {
+				Console.WriteLine("{0}: {1}", each.Key, each.Value);
+			}
+
 			var handshake = ComputeHandshake(req.Header.Properties["Sec-WebSocket-Key"]);
 			WriteStartLine(stream, "HTTP/1.1 101 Switching Protocols");
 			WriteHeaders(stream, new Dictionary<string, string> {
@@ -34,7 +40,7 @@ namespace Nonocast.Connect {
 
 			while ((readCount = stream.Read(buffer, 0, buffer.Length)) > 0) {
 				string message = ParseReceiveData(buffer, readCount);
-				if (string.IsNullOrEmpty(message) && MessageReceived != null) MessageReceived(message);
+				if (!string.IsNullOrEmpty(message) && MessageReceived != null) MessageReceived(message);
 			}
 		}
 
@@ -78,9 +84,6 @@ namespace Nonocast.Connect {
 				buffer[1] = (byte)messageBuffer.Length;
 				Array.Copy(messageBuffer, 0, buffer, 2, messageBuffer.Length);
 				stream.Write(buffer, 0, buffer.Length);
-				//stream.WriteByte(0x81);
-				//stream.WriteByte((byte)messageBuffer.Length);
-				//stream.Write(messageBuffer, 0, messageBuffer.Length);
 			}
 		}
 
