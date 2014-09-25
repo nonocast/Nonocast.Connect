@@ -39,6 +39,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MessageParser.cs" />
+    <Compile Include="Misc\ByteHelper.cs" />
+    <Compile Include="Misc\ByteQueue.cs" />
+    <Compile Include="RequestHeader.cs" />
     <Compile Include="WebSocket.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

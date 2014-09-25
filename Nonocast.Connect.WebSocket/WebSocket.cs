@@ -14,6 +14,10 @@ namespace Nonocast.Connect.WebSocket {
 			var p = new Uri(this.url);
 			this.hostname = p.Host;
 			this.port = p.Port;
+			this.parser = new MessageParser();
+			this.parser.MessageReceived += (message) => {
+				if (!string.IsNullOrEmpty(message) && MessageReceived != null) MessageReceived(message);
+			};
 		}
 
 		public void Open() {
@@ -26,39 +30,34 @@ namespace Nonocast.Connect.WebSocket {
 		}
 
 		private void Handshake() {
-			string content = @"GET /x HTTP/1.1
-Upgrade: websocket
-Connection: Upgrade
-Sec-WebSocket-Key: HnUJNuLm5FDSnTM4b1Qnug==
-Sec-WebSocket-Version: 13
-
-";
-			var data = Encoding.ASCII.GetBytes(content);
+			var header = new RequestHeader();
+			header.StartLine = "GET /x HTTP/1.1";
+			header.Properties.Add("Upgrade", "websocket");
+			header.Properties.Add("Connection", "Upgrade");
+			header.Properties.Add("Sec-WebSocket-Key", "HnUJNuLm5FDSnTM4b1Qnug==");
+			header.Properties.Add("Sec-WebSocket-Version", "13");
+			var data = Encoding.ASCII.GetBytes(header.ToString());
 			this.stream.Write(data, 0, data.Length);
 		}
 
 		private void Process(object arg) {
 			var stream = arg as NetworkStream;
 
+			var header = new RequestHeader(stream);
+
 			byte[] buffer = new byte[4096];
 			int readCount = 0;
 
 			while ((readCount = stream.Read(buffer, 0, buffer.Length)) > 0) {
-				string message = ParseReceiveData(buffer, readCount);
-				if (!string.IsNullOrEmpty(message) && MessageReceived != null) MessageReceived(message);
+				parser.Push(buffer, readCount);
 			}
-		}
-
-		private string ParseReceiveData(byte[] buffer, int readCount) {
-			var payload = new byte[readCount - 2];
-			Array.Copy(buffer, 2, payload, 0, readCount - 2);
-			return Encoding.UTF8.GetString(payload);
 		}
 
 		public void Close() {
 			client.Close();
 		}
 
+		private MessageParser parser;
 		private TcpClient client;
 		private NetworkStream stream;
 		private string hostname;

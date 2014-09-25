@@ -84,6 +84,9 @@ namespace Nonocast.Connect {
 				buffer[1] = (byte)messageBuffer.Length;
 				Array.Copy(messageBuffer, 0, buffer, 2, messageBuffer.Length);
 				stream.Write(buffer, 0, buffer.Length);
+				//stream.WriteByte(0x81);
+				//stream.WriteByte((byte)messageBuffer.Length);
+				//stream.Write(messageBuffer, 0, messageBuffer.Length);
 			}
 		}
 

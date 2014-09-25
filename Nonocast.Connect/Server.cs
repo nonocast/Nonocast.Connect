@@ -35,7 +35,6 @@ namespace Nonocast.Connect {
 				}
 			}
 
-
 			listener.BeginAcceptTcpClient(new AsyncCallback(AcceptCallback), listener);
 			return this;
 		}
