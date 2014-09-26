@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
@@ -41,6 +42,7 @@ namespace Nonocast.Connect.WebSocket {
 		}
 
 		private void Process(object arg) {
+			// Console.WriteLine("Thread Enter...");
 			var stream = arg as NetworkStream;
 
 			var header = new RequestHeader(stream);
@@ -48,8 +50,16 @@ namespace Nonocast.Connect.WebSocket {
 			byte[] buffer = new byte[4096];
 			int readCount = 0;
 
-			while ((readCount = stream.Read(buffer, 0, buffer.Length)) > 0) {
-				parser.Push(buffer, readCount);
+			try {
+				while ((readCount = stream.Read(buffer, 0, buffer.Length)) > 0) {
+					parser.Push(buffer, readCount);
+				}
+			} catch (IOException) {
+				// ignore
+			} catch {
+				// ignore
+			} finally {
+				// Console.WriteLine("Thread Exit...");
 			}
 		}
 
