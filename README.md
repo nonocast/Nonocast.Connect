@@ -67,6 +67,68 @@ static void Main(string[] args) {
 }
 ```
 
+###设计原理
+
+``` csharp
+public interface Middleware {
+	void Handle(Request req, Response res);
+}
+
+public interface WebApplication {
+	WebApplication Use(Middleware middleware);
+	void Handle(Request req, Response res);
+}
+
+
+public class WebApp : WebApplication {
+	public List<Middleware> Middlewares { get; private set; }
+
+	public WebApplication Use(Middleware middleware) {
+		this.Middlewares.Add(middleware);
+		return this;
+	}
+
+	public void Handle(Request req, Response res) {
+		foreach (var each in this.Middlewares) {
+			if (res.Done) break;
+
+			if (res.Error != null && !(each is ErrorHandler)) {
+				continue;
+			}
+
+			try {
+				each.Handle(req, res);
+			} catch (Exception ex) {
+				res.Error = ex;
+			}
+		}
+	}
+}
+```
+
+所以如果需要自定义Middleware只需要实现Middleware接口即可，比如Static，
+
+```
+public class Static : Middleware {
+	public string Root { get; private set; }
+	public Static(string root) {
+		this.Root = root;
+	}
+
+	public void Handle(Request req, Response res) {
+		if ("GET" != req.Method && "HEAD" != req.Method) return;
+		var path = Path.Combine(this.Root, req.Path.TrimStart(new char[] { '/' }));
+		if (File.Exists(path)) {
+			res.SendFile(path);
+		}
+	}
+}
+```
+
+然后在client方use即完成Middleware的插入。
+
+Enjoy~
+
 ###授权
 
 [GPL v2](LICENSE)
