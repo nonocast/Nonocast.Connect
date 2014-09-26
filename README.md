@@ -18,8 +18,9 @@ Nonocast.Connect通过TCPListener自行实现HTTP协议解析，可根据需要�
 - Static
 - Logger
 - Router
-- WebSocket (RFC 6455) 
-- 
+- WebSocket
+- ErrorHandler
+
 ###待实现的中间件
 
 - BodyParser
@@ -35,12 +36,31 @@ Package-Install Nonocast.Connect
 
 ###起步
 
-```csharp
+``` csharp
 static void Main(string[] args) {
 	var app = new Nonocast.Connect.WebApp();
 	app.Get("/", (req, res) => { res.Html("<h1>hello world</h1>"); });
 
 	var server = new Server(app).Listen(new int[] { 80, 8000, 7005 });
+
+	Console.WriteLine("listening on port {0}", server.Port);
+	Console.ReadLine();
+}
+```
+
+如果需要启动WebSocket服务
+
+``` csharp
+static void Main(string[] args) {
+	IWebSocketServer ws = new WebSocket6455();
+	ws.MessageReceived += (message) => { Console.WriteLine(message); };
+
+	var app = new Nonocast.Connect.WebApp();
+	app.Use(ws);
+	app.Get("/", (req, res) => { res.Html("<h1>hello world</h1>"); });
+	app.Get("/bala", (req, res) => { ws.Emit("balabala..."); res.Html("OK"); });
+
+	var server = new Server(app).Listen(new int[] { 8000 });
 
 	Console.WriteLine("listening on port {0}", server.Port);
 	Console.ReadLine();
