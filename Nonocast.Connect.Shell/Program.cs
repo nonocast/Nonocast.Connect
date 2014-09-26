@@ -13,9 +13,9 @@ namespace Nonocast.Connect.Shell {
 	public class Program {
 		static void Main(string[] args) {
 			IWebSocketServer ws = new WebSocket6455();
-			ws.MessageReceived += (message) => { };
-			
-			var app = new WebApp();
+			ws.MessageReceived += (message) => { Console.WriteLine(message); };
+
+			var app = new Nonocast.Connect.WebApp();
 			app.Use(ws);
 			app.Get("/", (req, res) => { res.Html("<h1>hello world</h1>"); });
 			app.Get("/bala", (req, res) => { ws.Emit("balabala..."); res.Html("OK"); });

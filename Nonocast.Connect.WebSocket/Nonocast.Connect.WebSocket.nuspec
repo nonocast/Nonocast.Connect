@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+	<metadata>
+		<id>$id$</id>
+		<version>$version$</version>
+		<title>$title$</title>
+		<authors>$author$</authors>
+		<owners>$author$</owners>
+		<licenseUrl>http://www.gnu.org/licenses/gpl-2.0.html</licenseUrl>
+		<projectUrl>https://github.com/nonocast/Nonocast.Connect/</projectUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<description>$description$</description>
+		<releaseNotes>Initial Version</releaseNotes>
+		<copyright>Copyright 2014</copyright>
+		<tags>HTTP WebSocket</tags>
+	</metadata>
+</package>

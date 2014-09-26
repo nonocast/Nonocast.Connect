@@ -9,7 +9,6 @@ namespace Nonocast.Connect {
 		public string Root { get; private set; }
 		public Static(string root) {
 			this.Root = root;
-			// Directory.CreateDirectory(this.Root);
 		}
 
 		public void Handle(Request req, Response res) {
