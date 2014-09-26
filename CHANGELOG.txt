@@ -1,5 +1,2 @@
-v0.1.0 | 全面完成WebSocket后升级为v0.2.0
-1. 实现Connect初步框架
-2. 实现Static等基础Middleware
-3. 初步实现WebSocket Middleware
-4. 初步实现WebSocket Client
+v0.1.0
+初始版本
