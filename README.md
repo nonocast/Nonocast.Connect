@@ -129,6 +129,56 @@ public class Static : Middleware {
 
 Enjoy~
 
+###页面渲染
+
+目前Nonocast.Connect默认采用了Razor作为View渲染引擎。通过以下代码进行配置，
+
+``` csharp
+webapp.Set("view", <your-view-path>);
+```
+
+以Error.cshtml为例，
+``` html
+<doctype html>
+<html>
+<head>
+  <title>error</title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+<body>
+  <h1>@Model.error.Message</h1>
+  <h2>@Model.error.Source</h2>
+  <pre>@Model.error.StackTrace</pre>
+</body>
+</html>
+```
+
+Razor具体语法参考ASP.NET MVC相关资料。
+通过Response.Render方法即可渲染页面，
+
+``` csharp
+app.Get("/", (req, res) => res.Render("index",  new { error = res.Error }));
+```
+
+###关于Nonocast.Connect.WebSocket
+
+Nonocast.Connect.WebSocket是针对Nonocast.Connect中WebSocket服务所写的非常轻量级的WebSocket Client实现方式。
+通过Nuget安装，
+
+Install-Package Nonocast.Connect.WebSocket
+
+``` csharp
+static void Main(string[] args) {
+	var ws = new WebSocket("ws://localhost:8000/x");
+	ws.MessageReceived += (message) => Console.WriteLine(message);
+	ws.Open();
+
+	Console.WriteLine("press any key to exit.");
+	Console.ReadLine();
+	ws.Close();
+}
+```
+
 ###授权
 
 [GPL v2](LICENSE)
