@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Nonocast.Connect.WebSocket.Contract;
 
 namespace Nonocast.Connect.WebSocket {
-	public class MessageParser {
-		public event Action<string> MessageReceived;
+	public class FrameParser {
+		public event Action<Message> MessageReceived;
 
-		public MessageParser() {
+		public FrameParser() {
 			buffer = new ByteQueue();
 		}
 
@@ -18,7 +19,7 @@ namespace Nonocast.Connect.WebSocket {
 
 			string message = null;
 			while ((message = Scan()) != null) {
-				if (MessageReceived != null) MessageReceived(message);
+				if (MessageReceived != null) MessageReceived(new TextMessage());
 			}
 		}
 

@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Document", "Document", "{75
 		Nuget.txt = Nuget.txt
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nonocast.Connect.WebSocket.Contract", "Nonocast.Connect.WebSocket.Contract\Nonocast.Connect.WebSocket.Contract.csproj", "{1E5E9935-4A32-41D6-87A4-2709AFA5B058}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{32AAB29F-4870-420D-9B76-2CCE63B3A67A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32AAB29F-4870-420D-9B76-2CCE63B3A67A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32AAB29F-4870-420D-9B76-2CCE63B3A67A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E5E9935-4A32-41D6-87A4-2709AFA5B058}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E5E9935-4A32-41D6-87A4-2709AFA5B058}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E5E9935-4A32-41D6-87A4-2709AFA5B058}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E5E9935-4A32-41D6-87A4-2709AFA5B058}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

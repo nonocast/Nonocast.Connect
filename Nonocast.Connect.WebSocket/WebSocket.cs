@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using Nonocast.Connect.WebSocket.Contract;
 
 namespace Nonocast.Connect.WebSocket {
 	public class WebSocket {
@@ -15,9 +16,11 @@ namespace Nonocast.Connect.WebSocket {
 			var p = new Uri(this.url);
 			this.hostname = p.Host;
 			this.port = p.Port;
-			this.parser = new MessageParser();
+			this.parser = new FrameParser();
 			this.parser.MessageReceived += (message) => {
-				if (!string.IsNullOrEmpty(message) && MessageReceived != null) MessageReceived(message);
+				if (message is TextMessage) {
+					if (MessageReceived != null) MessageReceived((message as TextMessage).Content);
+				}
 			};
 		}
 
@@ -67,7 +70,7 @@ namespace Nonocast.Connect.WebSocket {
 			client.Close();
 		}
 
-		private MessageParser parser;
+		private FrameParser parser;
 		private TcpClient client;
 		private NetworkStream stream;
 		private string hostname;

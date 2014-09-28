@@ -86,6 +86,12 @@ namespace Nonocast.Connect {
 			return this;
 		}
 
+		public Response WriteHeader(RequestHeader header) {
+			var data = Encoding.ASCII.GetBytes(header.ToString());
+			Stream.Write(data, 0, data.Length);
+			return this;
+		}
+
 		private Response WriteHeader() {
 			var header = new StringBuilder();
 			foreach (var each in headers) {

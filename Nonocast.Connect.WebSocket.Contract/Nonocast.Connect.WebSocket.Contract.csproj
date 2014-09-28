@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{EA858DC5-B80F-4477-A9C8-3789EA621FC2}</ProjectGuid>
+    <ProjectGuid>{1E5E9935-4A32-41D6-87A4-2709AFA5B058}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Nonocast.Connect.WebSocket</RootNamespace>
-    <AssemblyName>Nonocast.Connect.WebSocket</AssemblyName>
+    <RootNamespace>Nonocast.Connect.WebSocket.Contract</RootNamespace>
+    <AssemblyName>Nonocast.Connect.WebSocket.Contract</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -39,21 +39,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MessageParser.cs" />
-    <Compile Include="Misc\ByteHelper.cs" />
-    <Compile Include="Misc\ByteQueue.cs" />
-    <Compile Include="RequestHeader.cs" />
-    <Compile Include="WebSocket.cs" />
+    <Compile Include="Frame.cs" />
+    <Compile Include="Message.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Nonocast.Connect.WebSocket.nuspec" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Nonocast.Connect.WebSocket.Contract\Nonocast.Connect.WebSocket.Contract.csproj">
-      <Project>{1e5e9935-4a32-41d6-87a4-2709afa5b058}</Project>
-      <Name>Nonocast.Connect.WebSocket.Contract</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

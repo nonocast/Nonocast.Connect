@@ -14,7 +14,7 @@ namespace Nonocast.Connect {
 
 		public string StartLine {
 			get { return startline; }
-			private set {
+			set {
 				startline = value;
 				if (!string.IsNullOrEmpty(startline)) {
 					var startlineRule = new Regex(@"^(GET|HEAD|POST|PUT|DELETE|TRACE|CONNECT) (.+) HTTP/1.1$");
@@ -58,6 +58,7 @@ namespace Nonocast.Connect {
 			foreach (var each in Properties) {
 				sb.AppendFormat("{0}: {1}{2}", each.Key, each.Value, Environment.NewLine);
 			}
+			sb.AppendLine();
 			return sb.ToString();
 		}
 

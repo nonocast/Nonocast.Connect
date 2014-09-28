@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace Nonocast.Connect.WebSocket {
+namespace Nonocast.Connect.WebSocket.Contract {
 	static public class ByteHelper {
 		static public byte[] Merge(params byte[][] arg) {
 			int length = 0;

@@ -71,6 +71,12 @@
     <None Include="Nonocast.Connect.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Nonocast.Connect.WebSocket.Contract\Nonocast.Connect.WebSocket.Contract.csproj">
+      <Project>{1e5e9935-4a32-41d6-87a4-2709afa5b058}</Project>
+      <Name>Nonocast.Connect.WebSocket.Contract</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

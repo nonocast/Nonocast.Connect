@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text;
+using Nonocast.Connect.WebSocket.Contract;
 
 namespace Nonocast.Connect {
 	public class WebSocket6455 : IWebSocketServer {
@@ -20,24 +21,20 @@ namespace Nonocast.Connect {
 
 			var stream = req.Stream;
 
-			//Console.WriteLine(req.Header.StartLine);
-			//foreach (var each in req.Header.Properties) {
-			//	Console.WriteLine("{0}: {1}", each.Key, each.Value);
-			//}
-
 			var handshake = ComputeHandshake(req.Header.Properties["Sec-WebSocket-Key"]);
-			WriteStartLine(stream, "HTTP/1.1 101 Switching Protocols");
-			WriteHeaders(stream, new Dictionary<string, string> {
-						{"Upgrade", "websocket"},
-						{"Connection", "Upgrade"},
-						{"Sec-WebSocket-Accept", handshake}});
+
+			var header = new RequestHeader();
+			header.StartLine = "HTTP/1.1 101 Switching Protocols";
+			header.Properties.Add("Upgrade", "websocket");
+			header.Properties.Add("Connection", "Upgrade");
+			header.Properties.Add("Sec-WebSocket-Accept", handshake);
+			res.WriteHeader(header);
 
 			Clients.Add(stream);
 			ConsoleHelper.WriteLine(ConsoleColor.White, "WebSocket running...");
 
 			byte[] buffer = new byte[4096];
 			int readCount = 0;
-
 			while ((readCount = stream.Read(buffer, 0, buffer.Length)) > 0) {
 				string message = ParseReceiveData(buffer, readCount);
 				if (!string.IsNullOrEmpty(message) && MessageReceived != null) MessageReceived(message);
@@ -51,22 +48,6 @@ namespace Nonocast.Connect {
 				   header.Properties.ContainsKey("Sec-WebSocket-Key");
 		}
 
-		private static void WriteStartLine(NetworkStream stream, string arg) {
-			arg += Environment.NewLine;
-			byte[] buffer = Encoding.ASCII.GetBytes(arg);
-			stream.Write(buffer, 0, buffer.Length);
-		}
-
-		private void WriteHeaders(NetworkStream stream, Dictionary<string, string> headers) {
-			var sb = new StringBuilder();
-			foreach (var each in headers) {
-				sb.AppendLine(string.Format("{0}: {1}", each.Key, each.Value));
-			}
-			sb.Append(Environment.NewLine);
-			byte[] buffer = Encoding.ASCII.GetBytes(sb.ToString());
-			stream.Write(buffer, 0, buffer.Length);
-		}
-
 		private string ComputeHandshake(string key) {
 			var challenge = key + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
 			byte[] handshakeBytes = null;
@@ -77,17 +58,9 @@ namespace Nonocast.Connect {
 		}
 
 		private void WriteMessage(NetworkStream stream, string message) {
-			var messageBuffer = Encoding.UTF8.GetBytes(message);
-			if (messageBuffer.Length < 126) {
-				var buffer = new Byte[messageBuffer.Length + 2];
-				buffer[0] = 0x81;
-				buffer[1] = (byte)messageBuffer.Length;
-				Array.Copy(messageBuffer, 0, buffer, 2, messageBuffer.Length);
-				stream.Write(buffer, 0, buffer.Length);
-				//stream.WriteByte(0x81);
-				//stream.WriteByte((byte)messageBuffer.Length);
-				//stream.Write(messageBuffer, 0, messageBuffer.Length);
-			}
+			//var buffer = new ServerFrame(new TextMessage("xxxxx")).ToBytes();
+			var buffer = new ServerFrame(new TextMessage("hello world hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world ")).ToBytes();
+			stream.Write(buffer, 0, buffer.Length);
 		}
 
 		public void Emit(string message) {
@@ -96,8 +69,10 @@ namespace Nonocast.Connect {
 			foreach (var each in clients) {
 				try {
 					WriteMessage(each, message);
-				} catch {
+				} catch (Exception ex) {
+					Console.WriteLine(ex.Message);
 					each.Close();
+					Clients.Remove(each);	// TODO
 				}
 			}
 		}
