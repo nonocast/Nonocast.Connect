@@ -58,6 +58,8 @@ namespace Nonocast.Connect {
 		}
 
 		private void WriteMessage(NetworkStream stream, string message) {
+			var buffer1 = new ServerFrame(new TextMessage("x")).ToBytes();
+			stream.Write(buffer1, 0, buffer1.Length);
 			//var buffer = new ServerFrame(new TextMessage("xxxxx")).ToBytes();
 			var buffer = new ServerFrame(new TextMessage("hello world hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world ")).ToBytes();
 			stream.Write(buffer, 0, buffer.Length);

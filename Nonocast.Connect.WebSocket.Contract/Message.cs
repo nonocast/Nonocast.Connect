@@ -37,5 +37,9 @@ namespace Nonocast.Connect.WebSocket.Contract {
 		public override byte[] ToBytes() {
 			return Encoding.UTF8.GetBytes(Content);
 		}
+
+		public static Message Parse(byte[] data) {
+			return new TextMessage(Encoding.UTF8.GetString(data));
+		}
 	}
 }

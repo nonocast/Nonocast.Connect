@@ -59,8 +59,9 @@ namespace Nonocast.Connect.WebSocket {
 				}
 			} catch (IOException) {
 				// ignore
-			} catch {
-				// ignore
+			} catch (Exception ex) {
+				Console.WriteLine(ex.Message);
+				// RESET
 			} finally {
 				// Console.WriteLine("Thread Exit...");
 			}

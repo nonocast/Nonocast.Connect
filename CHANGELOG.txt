@@ -3,3 +3,8 @@ v0.1.0 | 全面完成WebSocket后升级为v0.2.0
 2. 实现Static等基础Middleware
 3. 初步实现WebSocket Middleware
 4. 初步实现WebSocket Client
+
+v0.1.1
+1. 增加Frame
+2. 增加Message
+3. 重构MessageParser，采用MemoryStream替换ByteQueue
