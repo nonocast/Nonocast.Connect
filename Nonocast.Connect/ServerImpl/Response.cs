@@ -82,6 +82,10 @@ namespace Nonocast.Connect {
 
 		public Response Reserve() {
 			this.Reserved = true;
+			return JustDone();
+		}
+
+		public Response JustDone() {
 			this.Done = true;
 			return this;
 		}

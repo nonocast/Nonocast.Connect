@@ -11,7 +11,10 @@ namespace Nonocast.Connect.WebSocket.Shell {
 			ws.Open();
 
 			Console.WriteLine("press any key to exit.");
-			Console.ReadLine();
+			string line = null;
+			while ((line = Console.ReadLine()) != null) {
+				ws.Emit("neVer");
+			}
 			ws.Close();
 		}
 	}

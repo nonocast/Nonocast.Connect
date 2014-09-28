@@ -67,6 +67,11 @@ namespace Nonocast.Connect.WebSocket {
 			}
 		}
 
+		public void Emit(string message) {
+			var buffer = new ClientFrame(new TextMessage(message)).ToBytes();
+			stream.Write(buffer, 0, buffer.Length);
+		}
+
 		public void Close() {
 			client.Close();
 		}
@@ -77,5 +82,6 @@ namespace Nonocast.Connect.WebSocket {
 		private string hostname;
 		private int port;
 		private string url;
+
 	}
 }

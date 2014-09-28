@@ -35,9 +35,17 @@ namespace Nonocast.Connect {
 
 			byte[] buffer = new byte[4096];
 			int readCount = 0;
-			while ((readCount = stream.Read(buffer, 0, buffer.Length)) > 0) {
-				string message = ParseReceiveData(buffer, readCount);
-				if (!string.IsNullOrEmpty(message) && MessageReceived != null) MessageReceived(message);
+
+			try {
+				while ((readCount = stream.Read(buffer, 0, buffer.Length)) > 0) {
+					string message = ParseReceiveData(buffer, readCount);
+					if (!string.IsNullOrEmpty(message) && MessageReceived != null) MessageReceived(message);
+				}
+			} catch (CloseRequest) {
+				Console.WriteLine("! close request");
+			} finally {
+				try { Clients.Remove(stream); } catch { }
+				res.JustDone();
 			}
 		}
 
@@ -60,8 +68,8 @@ namespace Nonocast.Connect {
 		private void WriteMessage(NetworkStream stream, string message) {
 			var buffer1 = new ServerFrame(new TextMessage("x")).ToBytes();
 			stream.Write(buffer1, 0, buffer1.Length);
-			//var buffer = new ServerFrame(new TextMessage("xxxxx")).ToBytes();
-			var buffer = new ServerFrame(new TextMessage("hello world hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world ")).ToBytes();
+			var buffer = new ServerFrame(new TextMessage("hello world")).ToBytes();
+			//var buffer = new ServerFrame(new TextMessage("hello world hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world ")).ToBytes();
 			stream.Write(buffer, 0, buffer.Length);
 		}
 
@@ -74,7 +82,7 @@ namespace Nonocast.Connect {
 				} catch (Exception ex) {
 					Console.WriteLine(ex.Message);
 					each.Close();
-					Clients.Remove(each);	// TODO
+					Clients.Remove(each);
 				}
 			}
 		}
@@ -87,6 +95,11 @@ namespace Nonocast.Connect {
 			if (!fin) {
 				Console.WriteLine("recData exception: 超过一帧"); // 超过一帧暂不处理  
 				return null;
+			}
+
+			byte opcode = (byte)(recBytes[0] & 0x0F);
+			if (opcode == 0x08) {
+				throw new CloseRequest();
 			}
 
 			bool mask_flag = (recBytes[1] & 0x80) == 0x80; // 是否包含掩码  
@@ -128,4 +141,6 @@ namespace Nonocast.Connect {
 			return Encoding.UTF8.GetString(payload_data);
 		}
 	}
+
+	public class CloseRequest : ApplicationException { }
 }
