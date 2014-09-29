@@ -82,6 +82,5 @@ namespace Nonocast.Connect.WebSocket {
 		private string hostname;
 		private int port;
 		private string url;
-
 	}
 }

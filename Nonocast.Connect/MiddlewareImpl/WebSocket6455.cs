@@ -14,12 +14,22 @@ namespace Nonocast.Connect {
 
 		public WebSocket6455() {
 			Clients = new List<NetworkStream>();
+
 		}
 
 		public void Handle(Request req, Response res) {
 			if (!IsMatch(req)) return;
 
 			var stream = req.Stream;
+			var parser = new FrameParser();
+			parser.MessageReceived += (message) => {
+				if (message is TextMessage) {
+					if (MessageReceived != null) MessageReceived((message as TextMessage).Content);
+				}
+			};
+			parser.Close += () => {
+				lock (Clients) { Clients.Remove(stream); }
+			};
 
 			var handshake = ComputeHandshake(req.Header.Properties["Sec-WebSocket-Key"]);
 
@@ -30,7 +40,7 @@ namespace Nonocast.Connect {
 			header.Properties.Add("Sec-WebSocket-Accept", handshake);
 			res.WriteHeader(header);
 
-			Clients.Add(stream);
+			lock (Clients) { Clients.Add(stream); }
 			ConsoleHelper.WriteLine(ConsoleColor.White, "WebSocket running...");
 
 			byte[] buffer = new byte[4096];
@@ -38,13 +48,10 @@ namespace Nonocast.Connect {
 
 			try {
 				while ((readCount = stream.Read(buffer, 0, buffer.Length)) > 0) {
-					string message = ParseReceiveData(buffer, readCount);
-					if (!string.IsNullOrEmpty(message) && MessageReceived != null) MessageReceived(message);
+					parser.Push(buffer, readCount);
 				}
-			} catch (CloseRequest) {
-				Console.WriteLine("! close request");
 			} finally {
-				try { Clients.Remove(stream); } catch { }
+				try { lock (Clients) { Clients.Remove(stream); } } catch { }
 				res.JustDone();
 			}
 		}
@@ -66,11 +73,8 @@ namespace Nonocast.Connect {
 		}
 
 		private void WriteMessage(NetworkStream stream, string message) {
-			var buffer1 = new ServerFrame(new TextMessage("x")).ToBytes();
-			stream.Write(buffer1, 0, buffer1.Length);
-			var buffer = new ServerFrame(new TextMessage("hello world")).ToBytes();
-			//var buffer = new ServerFrame(new TextMessage("hello world hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world  hello world ")).ToBytes();
-			stream.Write(buffer, 0, buffer.Length);
+			var data = new ServerFrame(new TextMessage(message)).ToBytes();
+			stream.Write(data, 0, data.Length);
 		}
 
 		public void Emit(string message) {
@@ -86,61 +90,5 @@ namespace Nonocast.Connect {
 				}
 			}
 		}
-
-		private string ParseReceiveData(byte[] recBytes, int recByteLength) {
-			if (recByteLength < 2)
-				return null;
-
-			bool fin = (recBytes[0] & 0x80) == 0x80; // 1bit，1表示最后一帧  
-			if (!fin) {
-				Console.WriteLine("recData exception: 超过一帧"); // 超过一帧暂不处理  
-				return null;
-			}
-
-			byte opcode = (byte)(recBytes[0] & 0x0F);
-			if (opcode == 0x08) {
-				throw new CloseRequest();
-			}
-
-			bool mask_flag = (recBytes[1] & 0x80) == 0x80; // 是否包含掩码  
-			if (!mask_flag) {
-				Console.WriteLine("recData exception: 没有Mask"); // 不包含掩码的暂不处理  
-				return null;
-			}
-
-			int payload_len = recBytes[1] & 0x7F; // 数据长度  
-
-			byte[] masks = new byte[4];
-			byte[] payload_data;
-			if (payload_len == 126) {
-				Array.Copy(recBytes, 4, masks, 0, 4);
-				payload_len = (UInt16)(recBytes[2] << 8 | recBytes[3]);
-				payload_data = new byte[payload_len];
-				Array.Copy(recBytes, 8, payload_data, 0, payload_len);
-			} else if (payload_len == 127) {
-				Array.Copy(recBytes, 10, masks, 0, 4);
-				byte[] uInt64Bytes = new byte[8];
-				for (int i = 0; i < 8; i++) {
-					uInt64Bytes[i] = recBytes[9 - i];
-				}
-				UInt64 len = BitConverter.ToUInt64(uInt64Bytes, 0);
-
-				payload_data = new byte[len];
-				for (UInt64 i = 0; i < len; i++)
-					payload_data[i] = recBytes[i + 14];
-			} else {
-				Array.Copy(recBytes, 2, masks, 0, 4);
-				payload_data = new byte[payload_len];
-				Array.Copy(recBytes, 6, payload_data, 0, payload_len);
-			}
-
-			for (var i = 0; i < payload_len; i++)
-				payload_data[i] = (byte)(payload_data[i] ^ masks[i % 4]);
-
-
-			return Encoding.UTF8.GetString(payload_data);
-		}
 	}
-
-	public class CloseRequest : ApplicationException { }
 }

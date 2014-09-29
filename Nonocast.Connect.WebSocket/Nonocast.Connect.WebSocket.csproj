@@ -39,7 +39,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MessageParser.cs" />
     <Compile Include="RequestHeader.cs" />
     <Compile Include="WebSocket.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

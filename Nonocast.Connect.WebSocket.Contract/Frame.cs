@@ -46,7 +46,7 @@ namespace Nonocast.Connect.WebSocket.Contract {
 			} else {
 				stream.WriteByte(0x7F);
 				var bytes = BitConverter.GetBytes(payload);
-				stream.Write(new byte[] { bytes[7], bytes[6], bytes[5], bytes[4] }, 0, 4);
+				stream.Write(new byte[] { 0x00, 0x00, 0x00, 0x00, bytes[3], bytes[2], bytes[1], bytes[0] }, 0, 8);
 			}
 		}
 
@@ -88,32 +88,9 @@ namespace Nonocast.Connect.WebSocket.Contract {
 			: base(message) {
 
 		}
+	}
 
-		public static Frame Parse(byte[] data) {
-			if (data.Length < 3) throw new InvalidDataException();
-
-			ServerFrame result = null;
-
-			int offset = 1;
-			if (data[1] == 0x7E) {
-				offset += 3;
-			} else if (data[1] == 0x7F) {
-				offset += 9;
-			} else {
-				offset += 1;
-			}
-
-			var payload = new byte[data.Length - offset];
-			Array.Copy(data, offset, payload, 0, data.Length - offset);
-
-			byte opcode = (byte)(data[0] & 0x01);
-
-			if (opcode == 0x01) {
-				var message = TextMessage.Parse(payload);
-				result = new ServerFrame(message);
-			}
-
-			return result;
-		}
+	public class CloseFrame : FrameBase { 
+		
 	}
 }
