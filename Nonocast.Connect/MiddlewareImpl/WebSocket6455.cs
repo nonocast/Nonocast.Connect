@@ -5,7 +5,7 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text;
-using Nonocast.Connect.WebSocket.Contract;
+using Nonocast.Connect.WebSocket;
 
 namespace Nonocast.Connect {
 	public class WebSocket6455 : IWebSocketServer {

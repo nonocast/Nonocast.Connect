@@ -5,19 +5,18 @@ VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nonocast.Connect", "Nonocast.Connect\Nonocast.Connect.csproj", "{55177EA6-BAC7-49E6-8C11-D548A97E5858}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nonocast.Connect.Shell", "Nonocast.Connect.Shell\Nonocast.Connect.Shell.csproj", "{DAFE89B3-C3C7-4149-8329-4A9A6129884A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nonocast.Connect.WebSocket", "Nonocast.Connect.WebSocket\Nonocast.Connect.WebSocket.csproj", "{EA858DC5-B80F-4477-A9C8-3789EA621FC2}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nonocast.Connect.WebSocket.Shell", "Nonocast.Connect.WebSocket.Shell\Nonocast.Connect.WebSocket.Shell.csproj", "{32AAB29F-4870-420D-9B76-2CCE63B3A67A}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Document", "Document", "{75939329-9119-4B55-902F-0AC58F3B5393}"
 	ProjectSection(SolutionItems) = preProject
 		CHANGELOG.txt = CHANGELOG.txt
 		Nuget.txt = Nuget.txt
+		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nonocast.Connect.WebSocket.Contract", "Nonocast.Connect.WebSocket.Contract\Nonocast.Connect.WebSocket.Contract.csproj", "{1E5E9935-4A32-41D6-87A4-2709AFA5B058}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shell", "Shell", "{85BF5E37-C8EC-405E-B717-A62F449AA378}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConnectShell", "Shell\ConnectShell\ConnectShell.csproj", "{DAFE89B3-C3C7-4149-8329-4A9A6129884A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSocketShell", "Shell\WebSocketShell\WebSocketShell.csproj", "{32AAB29F-4870-420D-9B76-2CCE63B3A67A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,20 +32,16 @@ Global
 		{DAFE89B3-C3C7-4149-8329-4A9A6129884A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DAFE89B3-C3C7-4149-8329-4A9A6129884A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DAFE89B3-C3C7-4149-8329-4A9A6129884A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EA858DC5-B80F-4477-A9C8-3789EA621FC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EA858DC5-B80F-4477-A9C8-3789EA621FC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EA858DC5-B80F-4477-A9C8-3789EA621FC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EA858DC5-B80F-4477-A9C8-3789EA621FC2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{32AAB29F-4870-420D-9B76-2CCE63B3A67A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{32AAB29F-4870-420D-9B76-2CCE63B3A67A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32AAB29F-4870-420D-9B76-2CCE63B3A67A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32AAB29F-4870-420D-9B76-2CCE63B3A67A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1E5E9935-4A32-41D6-87A4-2709AFA5B058}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1E5E9935-4A32-41D6-87A4-2709AFA5B058}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1E5E9935-4A32-41D6-87A4-2709AFA5B058}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1E5E9935-4A32-41D6-87A4-2709AFA5B058}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{DAFE89B3-C3C7-4149-8329-4A9A6129884A} = {85BF5E37-C8EC-405E-B717-A62F449AA378}
+		{32AAB29F-4870-420D-9B76-2CCE63B3A67A} = {85BF5E37-C8EC-405E-B717-A62F449AA378}
 	EndGlobalSection
 EndGlobal

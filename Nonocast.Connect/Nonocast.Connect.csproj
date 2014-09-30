@@ -66,6 +66,10 @@
     <Compile Include="Server.cs" />
     <Compile Include="WebApp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebSocketImpl\Frame.cs" />
+    <Compile Include="WebSocketImpl\FrameParser.cs" />
+    <Compile Include="WebSocketImpl\Message.cs" />
+    <Compile Include="WebSocketImpl\WebSocket.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Nonocast.Connect.nuspec">
@@ -73,17 +77,10 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Nonocast.Connect.WebSocket.Contract\Nonocast.Connect.WebSocket.Contract.csproj">
-      <Project>{1e5e9935-4a32-41d6-87a4-2709afa5b058}</Project>
-      <Name>Nonocast.Connect.WebSocket.Contract</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>mkdir "$(ProjectDir)/dist/lib/net40"
 copy "$(TargetPath)" "$(ProjectDir)/dist/lib/net40"
-copy "$(TargetDir)Nonocast.Connect.WebSocket.Contract.dll" "$(ProjectDir)/dist/lib/net40"
 copy "$(ProjectDir)/Nonocast.Connect.nuspec" "$(ProjectDir)/dist"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

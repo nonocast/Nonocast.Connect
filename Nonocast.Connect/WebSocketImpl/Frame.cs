@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace Nonocast.Connect.WebSocket.Contract {
+namespace Nonocast.Connect.WebSocket {
 	public interface Frame {
 		Message Message { get; }
 		byte[] ToBytes();

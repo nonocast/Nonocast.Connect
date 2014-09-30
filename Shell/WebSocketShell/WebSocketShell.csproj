@@ -4,15 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{EA858DC5-B80F-4477-A9C8-3789EA621FC2}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{32AAB29F-4870-420D-9B76-2CCE63B3A67A}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Nonocast.Connect.WebSocket</RootNamespace>
-    <AssemblyName>Nonocast.Connect.WebSocket</AssemblyName>
+    <RootNamespace>Nonocast.Connect.WebSocket.Shell</RootNamespace>
+    <AssemblyName>Nonocast.Connect.WebSocket.Shell</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -39,17 +41,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="RequestHeader.cs" />
-    <Compile Include="WebSocket.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Nonocast.Connect.WebSocket.nuspec" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Nonocast.Connect.WebSocket.Contract\Nonocast.Connect.WebSocket.Contract.csproj">
-      <Project>{1e5e9935-4a32-41d6-87a4-2709afa5b058}</Project>
-      <Name>Nonocast.Connect.WebSocket.Contract</Name>
+    <ProjectReference Include="..\..\Nonocast.Connect\Nonocast.Connect.csproj">
+      <Project>{55177ea6-bac7-49e6-8c11-d548a97e5858}</Project>
+      <Name>Nonocast.Connect</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

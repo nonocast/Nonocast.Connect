@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Nonocast.Connect.WebSocket.Contract {
+namespace Nonocast.Connect.WebSocket {
 	public interface Message {
 		bool IsFinal { get; set; }
 		byte Opcode { get; }

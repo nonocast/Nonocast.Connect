@@ -5,7 +5,7 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 
-namespace Nonocast.Connect.WebSocket.Contract {
+namespace Nonocast.Connect.WebSocket {
 	public class FrameParser {
 		public event Action<Message> MessageReceived;
 		public event Action Close;

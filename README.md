@@ -160,18 +160,18 @@ Razor具体语法参考ASP.NET MVC相关资料。
 app.Get("/", (req, res) => res.Render("index",  new { error = res.Error }));
 ```
 
-###关于Nonocast.Connect.WebSocket
+###关于WebSocket Client
 
-Nonocast.Connect.WebSocket是针对Nonocast.Connect中WebSocket服务所写的非常轻量级的WebSocket Client实现方式。
-通过Nuget安装，
+Nonocast.Connect中独立实现了WebSocket Client，初步实现了WebSocket协议的解析，目前未能支持Multi-Frame，后续会完整的实现WebSocket协议。
 
-Install-Package Nonocast.Connect.WebSocket
+Install-Package Nonocast.Connect
 
 ``` csharp
 static void Main(string[] args) {
 	var ws = new WebSocket("ws://localhost:8000/x");
 	ws.MessageReceived += (message) => Console.WriteLine(message);
 	ws.Open();
+	ws.Emit("world hello");
 
 	Console.WriteLine("press any key to exit.");
 	Console.ReadLine();

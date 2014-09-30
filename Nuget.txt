@@ -1,7 +1,3 @@
-Pack:
-	nuget pack Nonocast.Connect.csproj -Prop Configuration=Release
-	or
-	nuget pack
-
-Publish:
-	nuget push Nonocast.Connect.x.x.x.x.nupkg
+dist
+1. nuget pack
+2. nuget push Nonocast.Connect.x.x.x.nupkg
