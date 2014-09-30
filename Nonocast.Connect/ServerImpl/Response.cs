@@ -48,12 +48,17 @@ namespace Nonocast.Connect {
 		}
 
 		public Response Send(string body) {
-			var data = Encoding.UTF8.GetBytes(body);
-			this.headers["Content-Length"] = data.Length;
-			WriteHeader();
-			Stream.Write(data, 0, data.Length);
-			Stream.Close();
-			this.Done = true;
+			try {
+				var data = Encoding.UTF8.GetBytes(body);
+				this.headers["Content-Length"] = data.Length;
+				WriteHeader();
+				Stream.Write(data, 0, data.Length);
+			} catch {
+				// ignore
+			} finally {
+				Stream.Close();
+				this.Done = true;
+			}
 			return this;
 		}
 

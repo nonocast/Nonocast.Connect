@@ -11,7 +11,7 @@ namespace Nonocast.Connect {
 		public int Port { get; private set; }
 
 		private Server() {
-			ConsoleHelper.Enable = true;
+			// ConsoleHelper.Enable = true;
 		}
 
 		public Server(WebApplication app)
