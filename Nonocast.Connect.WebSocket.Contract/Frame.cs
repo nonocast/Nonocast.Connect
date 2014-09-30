@@ -28,13 +28,18 @@ namespace Nonocast.Connect.WebSocket.Contract {
 				WritePayloadLength(stream, payload.Length);
 				WriteMaskFlag(stream);
 				WriteMask(stream);
-				stream.Write(payload, 0, payload.Length);
+				WritePayload(stream, payload);
 				return stream.ToArray();
 			}
 		}
+
 		protected virtual void WriteMaskFlag(Stream stream) { }
 
 		protected virtual void WriteMask(Stream stream) { }
+
+		protected virtual void WritePayload(Stream stream, byte[] payload) {
+			stream.Write(payload, 0, payload.Length);
+		}
 
 		private void WritePayloadLength(Stream stream, int payload) {
 			if (payload < 0x7E) {
@@ -63,7 +68,8 @@ namespace Nonocast.Connect.WebSocket.Contract {
 	public class ClientFrame : FrameBase {
 		public ClientFrame(Message message)
 			: base(message) {
-
+			this.masks = new byte[4];
+			random.NextBytes(this.masks);
 		}
 
 		protected override void WriteMaskFlag(Stream stream) {
@@ -75,11 +81,16 @@ namespace Nonocast.Connect.WebSocket.Contract {
 		}
 
 		protected override void WriteMask(Stream stream) {
-			var result = new byte[4];
-			random.NextBytes(result);
-			stream.Write(result, 0, result.Length);
+			stream.Write(this.masks, 0, this.masks.Length);
 		}
 
+		protected override void WritePayload(Stream stream, byte[] payload) {
+			
+			base.WritePayload(stream, payload);
+		}
+
+
+		private byte[] masks;
 		private Random random = new Random((int)DateTime.Now.Ticks);
 	}
 
@@ -90,7 +101,7 @@ namespace Nonocast.Connect.WebSocket.Contract {
 		}
 	}
 
-	public class CloseFrame : FrameBase { 
-		
+	public class CloseFrame : FrameBase {
+
 	}
 }

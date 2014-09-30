@@ -30,7 +30,6 @@ namespace Nonocast.Connect.WebSocket {
 			this.stream = client.GetStream();
 			Handshake();
 			new Thread(new ParameterizedThreadStart(Process)).Start(this.stream);
-
 		}
 
 		private void Handshake() {

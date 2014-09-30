@@ -8,3 +8,5 @@ v0.1.1
 1. 增加Frame
 2. 增加Message
 3. 重构MessageParser，采用MemoryStream替换ByteQueue
+4. 重构WebSocket6455服务端，重写了接收信息
+5. 支持CloseFrame
