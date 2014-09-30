@@ -10,3 +10,6 @@ v0.1.1
 3. 重构MessageParser，采用MemoryStream替换ByteQueue
 4. 重构WebSocket6455服务端，重写了接收信息
 5. 支持CloseFrame
+6. 基本功能
+
+v0.2.0

@@ -73,11 +73,12 @@ namespace Nonocast.Connect.WebSocket.Contract {
 		}
 
 		protected override void WriteMaskFlag(Stream stream) {
-			stream.Seek(2, SeekOrigin.Begin);
-			var p = stream.ReadByte();
-			stream.Seek(2, SeekOrigin.Begin);
-			stream.WriteByte((byte)(p | 0x80));
-			stream.Seek(0, SeekOrigin.End);
+			if (stream is MemoryStream) {
+				var p = stream as MemoryStream;
+				if (p.Length >= 2) {
+					p.GetBuffer()[1] |= 0x80;
+				}
+			}
 		}
 
 		protected override void WriteMask(Stream stream) {
@@ -85,7 +86,9 @@ namespace Nonocast.Connect.WebSocket.Contract {
 		}
 
 		protected override void WritePayload(Stream stream, byte[] payload) {
-			
+			for (var i = 0; i < payload.Length; i++) {
+				payload[i] = (byte)(payload[i] ^ masks[i % 4]);
+			}
 			base.WritePayload(stream, payload);
 		}
 

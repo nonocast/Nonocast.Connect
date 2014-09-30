@@ -9,6 +9,7 @@ namespace Nonocast.Connect.WebSocket.Shell {
 			var ws = new WebSocket("ws://localhost:8000/x");
 			ws.MessageReceived += (message) => Console.WriteLine(message);
 			ws.Open();
+			ws.Emit("hello world");
 
 			Console.WriteLine("press any key to exit.");
 			string line = null;

@@ -68,7 +68,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Nonocast.Connect.nuspec" />
+    <None Include="Nonocast.Connect.nuspec">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -78,6 +80,12 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>mkdir "$(ProjectDir)/dist/lib/net40"
+copy "$(TargetPath)" "$(ProjectDir)/dist/lib/net40"
+copy "$(TargetDir)Nonocast.Connect.WebSocket.Contract.dll" "$(ProjectDir)/dist/lib/net40"
+copy "$(ProjectDir)/Nonocast.Connect.nuspec" "$(ProjectDir)/dist"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

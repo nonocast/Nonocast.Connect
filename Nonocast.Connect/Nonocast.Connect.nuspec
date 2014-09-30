@@ -1,17 +1,22 @@
 <?xml version="1.0"?>
-<package >
-  <metadata>
-    <id>$id$</id>
-    <version>$version$</version>
-    <title>$title$</title>
-    <authors>$author$</authors>
-    <owners>$author$</owners>
-    <licenseUrl>http://www.gnu.org/licenses/gpl-2.0.html</licenseUrl>
-    <projectUrl>https://github.com/nonocast/Nonocast.Connect/</projectUrl>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>$description$</description>
-    <releaseNotes>Initial Version</releaseNotes>
-    <copyright>Copyright 2014</copyright>
-    <tags>HTTP WebSocket</tags>
-  </metadata>
+<package>
+	<metadata>
+		<id>Nonocast.Connect</id>
+		<version>0.2.1</version>
+		<title>Nonocast.Connect</title>
+		<authors>nonocast</authors>
+		<owners>nonocast</owners>
+		<licenseUrl>http://www.gnu.org/licenses/gpl-2.0.html</licenseUrl>
+		<projectUrl>https://github.com/nonocast/Nonocast.Connect/</projectUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<description>A small, lightweight, embeddable HTTP / WebSocket server for .NET applications.</description>
+		<releaseNotes>初步完成基本功能</releaseNotes>
+		<copyright>Copyright 2014</copyright>
+		<tags>HTTP WebSocket</tags>
+		<dependencies>
+			<dependency id="Newtonsoft.Json" version="6.0.5" />
+			<dependency id="log4net" version="2.0.3" />
+			<dependency id="RazorEngine" version="3.3.0" />
+		</dependencies>
+	</metadata>
 </package>
