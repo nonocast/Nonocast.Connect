@@ -12,11 +12,14 @@ using System.Threading;
 namespace Nonocast.Connect.Shell {
 	public class Program {
 		static void Main(string[] args) {
+			log4net.Config.XmlConfigurator.Configure();
+
 			IWebSocketServer ws = new WebSocket6455();
 			ws.MessageReceived += (message) => { Console.WriteLine(message); };
 
 			var app = new Nonocast.Connect.WebApp();
 			app.Use(ws);
+			app.Use(new Morgan());
 			app.Get("/", (req, res) => { res.Html("<h1>hello world</h1>"); });
 			app.Get("/bala", (req, res) => { ws.Emit("balabala..."); res.Html("OK"); });
 
