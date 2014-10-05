@@ -16,3 +16,6 @@ v0.2.0
 1. 调整结构，去掉WebSocketContract和WebSocket Client，移入Connect
 
 v0.2.2
+
+v0.2.4
+Fix (WebException:Section=ResponseStatusLine),将\n改为Environment.NewLine(\r\n)

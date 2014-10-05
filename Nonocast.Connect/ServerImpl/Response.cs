@@ -104,9 +104,10 @@ namespace Nonocast.Connect {
 		private Response WriteHeader() {
 			var header = new StringBuilder();
 			foreach (var each in headers) {
-				header.AppendFormat("{0}: {1}\n", each.Key, each.Value);
+				header.AppendFormat("{0}: {1}", each.Key, each.Value);
+				header.AppendLine();
 			}
-			string p = string.Format("HTTP/1.1 {0} {1}\n{2}\n", this.Code, Codes[this.Code], header);
+			string p = string.Format("HTTP/1.1 {0} {1}{3}{2}{3}", this.Code, Codes[this.Code], header, Environment.NewLine);
 
 			var data = Encoding.UTF8.GetBytes(p);
 			Stream.Write(data, 0, data.Length);
