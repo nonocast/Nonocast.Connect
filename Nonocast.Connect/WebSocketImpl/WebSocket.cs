@@ -18,27 +18,26 @@ namespace Nonocast.Connect.WebSocket {
 			this.port = p.Port;
 			this.parser = new FrameParser();
 			this.parser.MessageReceived += (message) => {
-				if(message is TextMessage) {
-					if(MessageReceived != null) MessageReceived((message as TextMessage).Content);
+				if (message is TextMessage) {
+					if (MessageReceived != null) MessageReceived((message as TextMessage).Content);
 				}
 			};
 		}
 
 		public void Open() {
-			if(_opening) return;
+			if (opening) return;
 			try {
-				_opening = true;
+				opening = true;
 				client = new TcpClient();
 				client.Connect(hostname, port);
 				this.stream = client.GetStream();
 				Handshake();
 				new Thread(new ParameterizedThreadStart(Process)).Start(this.stream);
 				Connected = true;
-				_opening = false;
-			} catch {// offline and try reconnect
+				opening = false;
+			} catch { // offline and try reconnect
 				Connected = false;
-				_opening = false;
-				return;
+				opening = false;
 			}
 		}
 
@@ -57,7 +56,7 @@ namespace Nonocast.Connect.WebSocket {
 			// Console.WriteLine("Thread Enter...");
 			var stream = arg as NetworkStream;
 
-			if(stream == null || stream.CanRead == false || stream.CanWrite == false || stream.DataAvailable == false) {
+			if (stream == null || stream.CanRead == false || stream.CanWrite == false || stream.DataAvailable == false) {
 				Connected = false;
 				return;
 			}
@@ -68,12 +67,12 @@ namespace Nonocast.Connect.WebSocket {
 			int readCount = 0;
 
 			try {
-				while((readCount = stream.Read(buffer, 0, buffer.Length)) > 0) {
+				while ((readCount = stream.Read(buffer, 0, buffer.Length)) > 0) {
 					parser.Push(buffer, readCount);
 				}
-			} catch(IOException) {
+			} catch (IOException) {
 				// ignore
-			} catch(Exception ex) {
+			} catch (Exception ex) {
 				Console.WriteLine(ex.Message);
 				// RESET
 			} finally {// offline and try reconnect
@@ -83,46 +82,42 @@ namespace Nonocast.Connect.WebSocket {
 		}
 
 		public void Emit(string message) {
-			if(Connected == false || stream == null) throw new SocketException();
+			if (Connected == false || stream == null) throw new SocketException();
 			var buffer = new ClientFrame(new TextMessage(message)).ToBytes();
 			try {
 				stream.Write(buffer, 0, buffer.Length);
-			} catch(IOException) {// offline and try reconnect
+			} catch (IOException) { // offline and try reconnect
 				Connected = false;
 			}
 		}
 
 		public void Close() {
-			try { if(stream != null) stream.Close(); } catch { }
-			try { if(client != null) client.Close(); } catch { }
+			try { if (stream != null) stream.Close(); } catch { }
+			try { if (client != null) client.Close(); } catch { }
 			stream = null;
 			client = null;
-			_connected = false;
+			connected = false;
 		}
 
 		private void StartReconnect() {
-			if(connTimer != null && connTimer.Enabled) return;
+			if (reconnectTimer != null && reconnectTimer.Enabled) return;
 
 			Close();
-			connTimer = new System.Timers.Timer(2000);
-			connTimer.Elapsed += connTimer_Elapsed;
-			connTimer.Start();
+			reconnectTimer = new System.Timers.Timer(2000);
+			reconnectTimer.Elapsed += (sender, e) => Open();
+			reconnectTimer.Start();
 		}
 
 		private void StopReconnect() {
-			try { connTimer.Stop(); } catch { }
-			try { connTimer.Close(); } catch { }
-		}
-
-		private void connTimer_Elapsed(object sender, ElapsedEventArgs e) {
-			Open();
+			try { reconnectTimer.Stop(); } catch { }
+			try { reconnectTimer.Close(); } catch { }
 		}
 
 		public bool Connected {
-			get { return _connected; }
+			get { return connected; }
 			set {
-				_connected = value;
-				if(value) {
+				connected = value;
+				if (value) {
 					StopReconnect();
 				} else {
 					StartReconnect();
@@ -136,8 +131,8 @@ namespace Nonocast.Connect.WebSocket {
 		private string hostname;
 		private int port;
 		private string url;
-		private bool _connected = false;
-		private bool _opening = false;
-		private System.Timers.Timer connTimer;
+		private bool connected = false;
+		private bool opening = false;
+		private System.Timers.Timer reconnectTimer;
 	}
 }
