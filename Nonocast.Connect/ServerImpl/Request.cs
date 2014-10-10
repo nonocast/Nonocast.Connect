@@ -15,8 +15,8 @@ namespace Nonocast.Connect {
 		public string Path { get; private set; }
 		public Dictionary<string, string> Params { get; private set; }
 		public Dictionary<string, string> Query { get; private set; }
-		public string Body { get; set; }
-		public MemoryStream Raw { get; set; }
+		public object Body { get; set; }
+		public byte[] Raw { get; set; }
 
 		private Request() {
 

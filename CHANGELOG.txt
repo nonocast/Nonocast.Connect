@@ -25,3 +25,6 @@ v0.2.5
 
 v0.2.6
 ³õ²½Ôö¼ÓBodyParser (json, urlencoded, multipart)
+
+v0.2.7
+ÐÞ¸´BodyParser-json

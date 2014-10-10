@@ -12,18 +12,15 @@ namespace Nonocast.Connect {
 			if (req.Header.Properties.ContainsKey("Content-Type") && req.Header.Properties.ContainsKey("Content-Length")) {
 				try {
 					var contentType = req.Header.Properties["Content-Type"].ToLower();
-					var contentLength = Convert.ToInt32(req.Header.Properties["Content-Length"]);
 
 					if (contentType == "application/json") {
-						byte[] buffer = new byte[contentLength];
-						req.Stream.Read(buffer, 0, contentLength);
-						req.Body = Encoding.UTF8.GetString(buffer);
+						if (json != null) json(req, res);
 					} else if (contentType == "application/x-www-form-urlencoded") {
-
+						if (urlencoded != null) urlencoded(req, res);
 					} else if (contentType == "multipart/form-data") {
-
+						if (multipart != null) multipart(req, res);
 					}
-				} catch { 
+				} catch {
 					res.Status(500).End();
 				}
 			}
@@ -31,7 +28,11 @@ namespace Nonocast.Connect {
 
 		public BodyParser Json() {
 			json = (req, res) => {
-
+				var contentLength = Convert.ToInt32(req.Header.Properties["Content-Length"]);
+				byte[] buffer = new byte[contentLength];
+				req.Stream.Read(buffer, 0, contentLength);
+				req.Raw = buffer;
+				req.Body = JsonConvert.DeserializeObject(Encoding.UTF8.GetString(buffer));
 			};
 			return this;
 		}

@@ -20,10 +20,15 @@ namespace Nonocast.Connect.Shell {
 			var app = new Nonocast.Connect.WebApp();
 			app.Use(ws);
 			app.Use(new Morgan());
+			app.Use(new BodyParser().Json());
 			app.Get("/", (req, res) => { res.Html("<h1>hello world</h1>"); });
+			app.Post("/login", (req, res) => {
+				Console.WriteLine(req.Body);
+				res.Status(200).End();
+			});
 			app.Get("/bala", (req, res) => { ws.Emit("balabala..."); res.Html("OK"); });
 
-			var server = new Server(app).Listen(new int[] { 8000 });
+			var server = new Server(app).Listen(new int[] { 8080 });
 
 			Console.WriteLine("listening on port {0}", server.Port);
 			Console.ReadLine();
