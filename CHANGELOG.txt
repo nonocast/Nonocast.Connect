@@ -22,3 +22,6 @@ Fix (WebException:Section=ResponseStatusLine),将\n改为Environment.NewLine(\r\n)
 
 v0.2.5
 增加WebSocket Client重连机制
+
+v0.2.6
+初步增加BodyParser (json, urlencoded, multipart)

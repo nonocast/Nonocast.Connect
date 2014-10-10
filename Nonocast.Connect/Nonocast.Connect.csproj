@@ -53,6 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MiddlewareImpl\BodyParser.cs" />
     <Compile Include="MiddlewareImpl\GenericMiddleware.cs" />
     <Compile Include="MiddlewareImpl\Morgan.cs" />
     <Compile Include="MiddlewareImpl\Router.cs" />

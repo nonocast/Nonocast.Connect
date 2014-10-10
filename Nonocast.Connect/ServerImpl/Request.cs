@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
@@ -14,7 +15,8 @@ namespace Nonocast.Connect {
 		public string Path { get; private set; }
 		public Dictionary<string, string> Params { get; private set; }
 		public Dictionary<string, string> Query { get; private set; }
-		public string Body { get; private set; }
+		public string Body { get; set; }
+		public MemoryStream Raw { get; set; }
 
 		private Request() {
 
