@@ -10,6 +10,8 @@ using System.Timers;
 namespace Nonocast.Connect.WebSocket {
 	public class WebSocket {
 		public event Action<string> MessageReceived;
+		public event Action<bool> ConnectionChanged;
+		public event Action Connecting;
 
 		public WebSocket(string url) {
 			this.url = url;
@@ -18,26 +20,24 @@ namespace Nonocast.Connect.WebSocket {
 			this.port = p.Port;
 			this.parser = new FrameParser();
 			this.parser.MessageReceived += (message) => {
-				if (message is TextMessage) {
-					if (MessageReceived != null) MessageReceived((message as TextMessage).Content);
+				if(message is TextMessage) {
+					if(MessageReceived != null) MessageReceived((message as TextMessage).Content);
 				}
 			};
 		}
 
 		public void Open() {
-			if (opening) return;
+			StopReconnect();
 			try {
-				opening = true;
 				client = new TcpClient();
+				if(Connecting != null) Connecting();
 				client.Connect(hostname, port);
 				this.stream = client.GetStream();
 				Handshake();
 				new Thread(new ParameterizedThreadStart(Process)).Start(this.stream);
 				Connected = true;
-				opening = false;
 			} catch { // offline and try reconnect
 				Connected = false;
-				opening = false;
 			}
 		}
 
@@ -56,7 +56,7 @@ namespace Nonocast.Connect.WebSocket {
 			// Console.WriteLine("Thread Enter...");
 			var stream = arg as NetworkStream;
 
-			if (stream == null || stream.CanRead == false || stream.CanWrite == false || stream.DataAvailable == false) {
+			if(stream == null) {
 				Connected = false;
 				return;
 			}
@@ -67,12 +67,12 @@ namespace Nonocast.Connect.WebSocket {
 			int readCount = 0;
 
 			try {
-				while ((readCount = stream.Read(buffer, 0, buffer.Length)) > 0) {
+				while((readCount = stream.Read(buffer, 0, buffer.Length)) > 0) {
 					parser.Push(buffer, readCount);
 				}
-			} catch (IOException) {
+			} catch(IOException) {
 				// ignore
-			} catch (Exception ex) {
+			} catch(Exception ex) {
 				Console.WriteLine(ex.Message);
 				// RESET
 			} finally {// offline and try reconnect
@@ -82,42 +82,42 @@ namespace Nonocast.Connect.WebSocket {
 		}
 
 		public void Emit(string message) {
-			if (Connected == false || stream == null) throw new SocketException();
+			if(Connected == false || stream == null) throw new SocketException();
 			var buffer = new ClientFrame(new TextMessage(message)).ToBytes();
 			try {
 				stream.Write(buffer, 0, buffer.Length);
-			} catch (IOException) { // offline and try reconnect
+			} catch(IOException) { // offline and try reconnect
 				Connected = false;
 			}
 		}
 
 		public void Close() {
-			try { if (stream != null) stream.Close(); } catch { }
-			try { if (client != null) client.Close(); } catch { }
+			StopReconnect();
+			try { if(stream != null) stream.Close(); } catch { }
+			try { if(client != null) client.Close(); } catch { }
 			stream = null;
 			client = null;
 			connected = false;
 		}
 
 		private void StartReconnect() {
-			if (reconnectTimer != null && reconnectTimer.Enabled) return;
-
+			if(reconnectTimer != null) return;
 			Close();
-			reconnectTimer = new System.Timers.Timer(2000);
-			reconnectTimer.Elapsed += (sender, e) => Open();
-			reconnectTimer.Start();
+			reconnectTimer = new System.Threading.Timer(new TimerCallback((o) => Open()), this, 0, 2000);
 		}
 
 		private void StopReconnect() {
-			try { reconnectTimer.Stop(); } catch { }
-			try { reconnectTimer.Close(); } catch { }
+			if(reconnectTimer == null) return;
+			try { reconnectTimer.Dispose(); } catch { }
+			reconnectTimer = null;
 		}
 
 		public bool Connected {
 			get { return connected; }
 			set {
+				if(connected != value && ConnectionChanged != null) ConnectionChanged(value);
 				connected = value;
-				if (value) {
+				if(value) {
 					StopReconnect();
 				} else {
 					StartReconnect();
@@ -132,7 +132,6 @@ namespace Nonocast.Connect.WebSocket {
 		private int port;
 		private string url;
 		private bool connected = false;
-		private bool opening = false;
-		private System.Timers.Timer reconnectTimer;
+		private System.Threading.Timer reconnectTimer;
 	}
 }

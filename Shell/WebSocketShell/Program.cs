@@ -8,17 +8,22 @@ using System.Threading;
 namespace Nonocast.Connect.WebSocket.Shell {
 	class Program {
 		static void Main(string[] args) {
-			var ws = new WebSocket("ws://localhost:8000/x");
+			//var ws = new WebSocket("ws://localhost:8000/x");
+			var ws = new WebSocket("ws://192.168.10.251:8080/x");
 			ws.MessageReceived += (message) => Console.WriteLine(message);
+			ws.Connecting += () => Console.WriteLine("Connecting");
+			ws.ConnectionChanged += (state) => {
+				if(state) Console.WriteLine("Connected");
+				else Console.WriteLine("Disconnected");
+			};
 			ws.Open();
 
-			Console.WriteLine("press any key to exit.");
+			string line = Console.ReadLine();
 			while(true) {
-				try {
-					Thread.Sleep(100);
-					ws.Emit("world hello");
-				} catch(SocketException) { }
+				if(line == "exit") break;
+				try { ws.Emit(line); } catch { }
 			}
+
 			ws.Close();
 		}
 	}
