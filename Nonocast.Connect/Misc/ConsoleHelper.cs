@@ -57,7 +57,7 @@ namespace Nonocast.Connect {
 		}
 
 		static ConsoleHelper() {
-			Enable = true;
+			Enable = false;
 
 			defaultbg = Console.BackgroundColor;
 			defaultfg = Console.ForegroundColor;
