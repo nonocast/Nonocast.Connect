@@ -27,6 +27,10 @@ namespace Nonocast.Connect.Shell {
 				res.Status(200).End();
 			});
 			app.Get("/bala", (req, res) => { ws.Emit("balabala..."); res.Html("OK"); });
+			//app.Post("/session/:id", (req, res) => { });
+
+			app.Use(new GenericMiddleware((req, res) => { res.Status(404).End(); }));
+			app.Use(new ErrorMiddleware((req, res) => { res.Status(500).End(); }));
 
 			var server = new Server(app).Listen(new int[] { 8080 });
 
