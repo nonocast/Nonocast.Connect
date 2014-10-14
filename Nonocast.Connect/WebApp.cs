@@ -52,6 +52,10 @@ namespace Nonocast.Connect {
 			this.Middlewares.Add(new Router("PUT", pattern, handle));
 		}
 
+		public void Patch(string pattern, RequestAction handle) {
+			this.Middlewares.Add(new Router("PATCH", pattern, handle));
+		}
+
 		public void Delete(string pattern, RequestAction handle) {
 			this.Middlewares.Add(new Router("DELETE", pattern, handle));
 		}

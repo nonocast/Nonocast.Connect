@@ -28,11 +28,14 @@ namespace Nonocast.Connect.Shell {
 			});
 			app.Get("/bala", (req, res) => { ws.Emit("balabala..."); res.Html("OK"); });
 			//app.Post("/session/:id", (req, res) => { });
+			app.Patch("/session/:id", (req, res) => {
+				res.Send(req.Params["id"]);
+			});
 
 			app.Use(new GenericMiddleware((req, res) => { res.Status(404).End(); }));
 			app.Use(new ErrorMiddleware((req, res) => { res.Status(500).End(); }));
 
-			var server = new Server(app).Listen(new int[] { 8080 });
+			var server = new Server(app).Listen(new int[] { 8000 });
 
 			Console.WriteLine("listening on port {0}", server.Port);
 			Console.ReadLine();
