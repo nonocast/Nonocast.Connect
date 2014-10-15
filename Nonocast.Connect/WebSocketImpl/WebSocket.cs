@@ -26,7 +26,7 @@ namespace Nonocast.Connect.WebSocket {
 			};
 		}
 
-		public void Open() {
+		public bool Open() {
 			StopReconnect();
 			try {
 				client = new TcpClient();
@@ -39,6 +39,13 @@ namespace Nonocast.Connect.WebSocket {
 			} catch { // offline and try reconnect
 				Connected = false;
 			}
+			return Connected;
+		}
+
+		public void BeginOpen() {
+			new Thread(new ThreadStart(() => {
+				Open();
+			})).Start();
 		}
 
 		private void Handshake() {
