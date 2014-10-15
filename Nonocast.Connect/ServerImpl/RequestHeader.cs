@@ -17,7 +17,8 @@ namespace Nonocast.Connect {
 			set {
 				startline = value;
 				if (!string.IsNullOrEmpty(startline)) {
-					var startlineRule = new Regex(@"^(GET|HEAD|POST|PUT|DELETE|TRACE|CONNECT) (.+) HTTP/1.1$");
+					// https://annevankesteren.nl/2007/10/http-methods
+					var startlineRule = new Regex(@"^(GET|HEAD|POST|PUT|DELETE|PATCH|TRACE|CONNECT) (.+) HTTP/1.1$");
 					if (startlineRule.IsMatch(startline)) {
 						var match = startlineRule.Match(startline);
 						Method = match.Groups[1].Value.Trim();

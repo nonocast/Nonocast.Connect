@@ -2,7 +2,7 @@
 <package>
 	<metadata>
 		<id>Nonocast.Connect</id>
-		<version>0.2.7</version>
+		<version>0.2.11</version>
 		<title>Nonocast.Connect</title>
 		<authors>nonocast</authors>
 		<owners>nonocast</owners>
@@ -10,7 +10,7 @@
 		<projectUrl>https://github.com/nonocast/Nonocast.Connect/</projectUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<description>A small, lightweight, embeddable HTTP / WebSocket server for .NET applications.</description>
-		<releaseNotes>初步增加BodyParser</releaseNotes>
+		<releaseNotes>Method PATCH</releaseNotes>
 		<copyright>Copyright 2014</copyright>
 		<tags>HTTP WebSocket</tags>
 		<dependencies>

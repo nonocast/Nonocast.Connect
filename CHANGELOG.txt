@@ -28,3 +28,16 @@ v0.2.6
 
 v0.2.7
 修复BodyParser-json
+
+v0.2.8
+Shell增加异常处理Middleware
+修复WebSocket重连机制
+
+v0.2.9
+consolehelper.enable=true
+
+v0.2.10
+增加PATCH Method
+
+v0.2.11
+fix PATCH
