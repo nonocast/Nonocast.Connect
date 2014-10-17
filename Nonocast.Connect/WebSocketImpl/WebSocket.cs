@@ -13,7 +13,7 @@ namespace Nonocast.Connect.WebSocket {
 		public event Action<bool> ConnectionChanged;
 		public event Action Connecting;
 
-		public WebSocket(string url) {
+		public WebSocket(string url, int reconnectInterval = 2000) {
 			this.url = url;
 			var p = new Uri(this.url);
 			this.hostname = p.Host;
@@ -24,9 +24,11 @@ namespace Nonocast.Connect.WebSocket {
 					if(MessageReceived != null) MessageReceived((message as TextMessage).Content);
 				}
 			};
+			reconnectTimer = new System.Timers.Timer(reconnectInterval);
+			reconnectTimer.Elapsed += (o1, e1) => { Open(); };
 		}
 
-		public void Open() {
+		public bool Open() {
 			StopReconnect();
 			try {
 				client = new TcpClient();
@@ -39,6 +41,11 @@ namespace Nonocast.Connect.WebSocket {
 			} catch { // offline and try reconnect
 				Connected = false;
 			}
+			return Connected;
+		}
+
+		public void BeginOpen() {
+			new Thread(new ThreadStart(() => { Open(); })).Start();
 		}
 
 		private void Handshake() {
@@ -101,15 +108,12 @@ namespace Nonocast.Connect.WebSocket {
 		}
 
 		private void StartReconnect() {
-			if(reconnectTimer != null) return;
 			Close();
-			reconnectTimer = new System.Threading.Timer(new TimerCallback((o) => Open()), this, 0, 2000);
+			reconnectTimer.Start();
 		}
 
 		private void StopReconnect() {
-			if(reconnectTimer == null) return;
-			try { reconnectTimer.Dispose(); } catch { }
-			reconnectTimer = null;
+			reconnectTimer.Stop();
 		}
 
 		public bool Connected {
@@ -132,6 +136,6 @@ namespace Nonocast.Connect.WebSocket {
 		private int port;
 		private string url;
 		private bool connected = false;
-		private System.Threading.Timer reconnectTimer;
+		private System.Timers.Timer reconnectTimer;
 	}
 }
