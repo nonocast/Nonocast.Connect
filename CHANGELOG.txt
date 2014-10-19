@@ -41,3 +41,6 @@ v0.2.10
 
 v0.2.11
 fix PATCH
+ÐÞ¸Ä¶ÁÈ¡Request Body
+
+v0.2.14

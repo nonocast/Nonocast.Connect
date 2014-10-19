@@ -20,7 +20,8 @@ namespace Nonocast.Connect {
 					} else if (contentType == "multipart/form-data") {
 						if (multipart != null) multipart(req, res);
 					}
-				} catch {
+				} catch (Exception ex) {
+					Console.WriteLine(ex.Message);
 					res.Status(500).End();
 				}
 			}
@@ -29,10 +30,19 @@ namespace Nonocast.Connect {
 		public BodyParser Json() {
 			json = (req, res) => {
 				var contentLength = Convert.ToInt32(req.Header.Properties["Content-Length"]);
+
 				byte[] buffer = new byte[contentLength];
-				req.Stream.Read(buffer, 0, contentLength);
+
+				var tmp = new byte[4096];
+				int total = 0;
+				do {
+					int readCount = req.Stream.Read(tmp, 0, tmp.Length);
+					Array.Copy(tmp, 0, buffer, total, readCount);
+					total += readCount;
+				} while (total < contentLength);
+
 				req.Raw = buffer;
-				req.Body = JsonConvert.DeserializeObject(Encoding.UTF8.GetString(buffer));
+				try { req.Body = JsonConvert.DeserializeObject(Encoding.UTF8.GetString(buffer)); } catch { }
 			};
 			return this;
 		}
