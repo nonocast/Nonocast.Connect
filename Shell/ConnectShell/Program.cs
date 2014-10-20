@@ -12,7 +12,7 @@ using System.Threading;
 namespace Nonocast.Connect.Shell {
 	public class Program {
 		static void Main(string[] args) {
-			log4net.Config.XmlConfigurator.Configure();
+			// log4net.Config.XmlConfigurator.Configure();
 
 			IWebSocketServer ws = new WebSocket6455();
 			ws.MessageReceived += (message) => { Console.WriteLine(message); };
@@ -31,11 +31,19 @@ namespace Nonocast.Connect.Shell {
 			app.Patch("/session/:id", (req, res) => {
 				res.Send(req.Params["id"]);
 			});
+			app.Post("/conf", (req, res) => {
+				try {
+					var current = Encoding.UTF8.GetString(req.Raw);
+					res.Status(200).End();
+				} catch (Exception) {
+					res.Status(400).End();
+				}
+			});
 
 			app.Use(new GenericMiddleware((req, res) => { res.Status(404).End(); }));
 			app.Use(new ErrorMiddleware((req, res) => { res.Status(500).End(); }));
 
-			var server = new Server(app).Listen(new int[] { 8000 });
+			var server = new Server(app).Listen(new int[] { 9000 });
 
 			Console.WriteLine("listening on port {0}", server.Port);
 			Console.ReadLine();
