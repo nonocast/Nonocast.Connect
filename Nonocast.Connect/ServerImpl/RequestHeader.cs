@@ -53,13 +53,16 @@ namespace Nonocast.Connect {
 			}
 		}
 
+		public static readonly string NewLine = "\r\n"; //websockets specs demand \r\n at header line end
+
 		public override string ToString() {
 			var sb = new StringBuilder();
-			sb.AppendLine(StartLine);
+			sb.Append(StartLine);
+			sb.Append (NewLine);
 			foreach (var each in Properties) {
-				sb.AppendFormat("{0}: {1}{2}", each.Key, each.Value, Environment.NewLine);
+				sb.AppendFormat("{0}: {1}{2}", each.Key, each.Value, NewLine);
 			}
-			sb.AppendLine();
+			sb.Append (NewLine);
 			return sb.ToString();
 		}
 

@@ -176,6 +176,7 @@ namespace Nonocast.Connect {
 			Mimes.Add("wma", "audio/x-ms-wma");
 			Mimes.Add("wmv", "video/x-ms-wmv");
 			Mimes.Add("apk", "application/vnd.android.package-archive");
+			Mimes.Add(".woff", "application/font-woff");
 		}
 
 		private Dictionary<string, object> headers;
